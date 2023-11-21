@@ -1,8 +1,10 @@
 package com.example.demo.DTO;
 
+import com.example.demo.entity.Board;
 import lombok.*;
 
 import javax.persistence.Column;
+import java.util.Collections;
 
 @Data
 @ToString
@@ -18,5 +20,10 @@ public class BoardDTO { //contents , titel() 값만 html에서 필요하니까 �
     @Column(length = 256)
     private String contents;
 
-
+    public Board toEntity() {
+        return Board.builder()
+                .title(title)
+                .contents(contents)
+                .build();
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import lombok.Builder;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -28,4 +30,14 @@ public class Board {
 
     // ** 최근 수정시간
     private LocalDateTime updateTime;
+
+    @Builder
+    public Board(Long id, String userName, String title, String contents, LocalDateTime createTime, LocalDateTime updateTime){
+        this.Id = Id;
+        this.userName = userName;
+        this.title = title;
+        this.contents = contents;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
 }
