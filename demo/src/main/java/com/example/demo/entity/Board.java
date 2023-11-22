@@ -11,7 +11,7 @@ public class Board {
     // ** PK
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private Long Id;
 
     // ** 작성자 이름
     @Column(length = 50)
@@ -32,7 +32,7 @@ public class Board {
     private LocalDateTime updateTime;
 
     @Builder
-    public Board(Long id, String userName, String title, String contents, LocalDateTime createTime, LocalDateTime updateTime){
+    public Board(Long Id, String userName, String title, String contents, LocalDateTime createTime, LocalDateTime updateTime){
         this.Id = Id;
         this.userName = userName;
         this.title = title;

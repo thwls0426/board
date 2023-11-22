@@ -7,13 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDateTime;
+
 @Controller
-//@RequestMapping("/board")
+//@RequestMapping("/board") 컨트롤러도 이런걸 써서 구분화 시키기
 public class BoardController {
 
     private final BoardService boardService;
 
-    public BoardController(BoardRepository boardRepository, BoardService boardService) {
+    public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
 
@@ -26,6 +28,6 @@ public class BoardController {
     public String save(@ModelAttribute BoardDTO boardDTO){
         System.out.println(boardDTO.getTitle() + " : " + boardDTO.getContents());
         boardService.save(boardDTO);
-        return "";
+        return "redirect: ";
     }
 }
