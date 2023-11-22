@@ -23,7 +23,6 @@ public class BoardService {
     public void save(BoardDTO boardDTO){
         boardDTO.setCreateTime(LocalDateTime.now()); //현재시간 출력
         log.info(boardDTO.toString());
-//        Board board = boardDTO.toEntity();
         boardRepository.save(boardDTO.toEntity());
     }
 

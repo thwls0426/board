@@ -4,7 +4,6 @@ import com.example.demo.entity.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface BoardRepository extends JpaRepository<Board, Long> { //이걸로 findall로 해야함
+public interface BoardRepository extends JpaRepository<Board, Long> {
 
 }
