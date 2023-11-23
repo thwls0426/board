@@ -9,8 +9,8 @@ spring:
     password: 850818
   thymeleaf:
     cache: false
-#  main:
-#    allow-bean-definition-overriding: true
+  main:
+    allow-bean-definition-overriding: true
 
   output:
     ansi:

@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.DTO.BoardDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,5 +44,13 @@ public class Board {
         this.contents = contents;
         this.createTime = createTime;
         this.updateTime = updateTime;
+    }
+
+
+    public void updateFromDTO(BoardDTO boardDTO){
+        // ** 모든 변경사항을 세팅 . 원래는 다 넣어야함! 나중에 다넣기
+
+        this.title = boardDTO.getTitle();
+        this.contents = boardDTO.getContents();
     }
 }
