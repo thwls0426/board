@@ -35,4 +35,13 @@ public class BoardDTO { //contents , titel() 값만 html에서 필요하니까 �
                 .updateTime(LocalDateTime.now()) // 수정만들면 수정데이터 들어감.
                 .build();
     }
+    //entity -> dto 변경 함수
+    public static BoardDTO toBoardDTO(Board board){
+        return new BoardDTO(
+                board.getId(),
+                board.getTitle(),
+                board.getContents(),
+                board.getCreateTime(),
+                board.getUpdateTime());
+    }
 }

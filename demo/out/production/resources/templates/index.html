@@ -9,10 +9,14 @@ Home
 <br>
 <br>
 <button onclick="create()">글쓰기</button>
+<button onclick="read()">목록</button>
 </body>
 <script>
     const create = () => {
-        location.href ="/createBoard";
+        location.href ="/board/create";
+    }
+    const read = () => {
+        location.href ="/board/paging";
     }
 </script>
 </html>
