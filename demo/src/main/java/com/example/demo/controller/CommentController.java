@@ -24,11 +24,11 @@ public class CommentController {
     @PostMapping("/save")
     public ResponseEntity save(@ModelAttribute CommentDTO commentDTO){
 
-        System.out.println(commentDTO);
         Comment comment = commentService.save(commentDTO);
+        System.out.println(commentDTO);
 
         if (comment != null){
-            return new ResponseEntity<>("", HttpStatus.OK);
+            return new ResponseEntity<>("/board/detail/"+ comment.getBoard().getId(), HttpStatus.OK);
         }else{
             return new ResponseEntity<>("게시글이 없습니다.", HttpStatus.NOT_FOUND);
         }
