@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.Access;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,13 +23,15 @@ public class CommentController {
 
     //에러 반환
     @PostMapping("/save")
-    public ResponseEntity<String> save(@ModelAttribute CommentDTO commentDTO){
+    public ResponseEntity save(@ModelAttribute CommentDTO commentDTO){
 
         System.out.println(commentDTO);
         Comment comment = commentService.save(commentDTO);
 
+        List<CommentDTO> all = commentService.findAll(commentDTO.getBoardId());
+
         if (comment != null){
-            return new ResponseEntity<>("/board/detail/"+ comment.getBoard().getId(), HttpStatus.OK);
+            return new ResponseEntity<>(all, HttpStatus.OK);
         }else{
             return new ResponseEntity<>("게시글이 없습니다.", HttpStatus.NOT_FOUND);
         }

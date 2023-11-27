@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Transactional(readOnly = true)
@@ -20,10 +22,6 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
 
-    public CommentDTO findById(Long id){
-        Comment comment = commentRepository.findById(id).get();
-        return CommentDTO.toCommentDTO(comment);
-    }
 
     @Transactional
     public Comment save(CommentDTO commentDTO) {
@@ -33,9 +31,23 @@ public class CommentService {
 
         if(optionalBoard.isPresent()){
             Board board = optionalBoard.get();
-            return commentRepository.save(commentDTO.toCommentEntity()); //모든 분기에서 return을 넣어야 오류가 안난다. 현재는 null 인데 추ㅜㅎ 수정할 에정
+            Comment entity = commentDTO.toCommentEntity();
+            entity.toUpdate(board);
+            return commentRepository.save(entity); //모든 분기에서 return을 넣어야 오류가 안난다. 현재는 null 인데 추ㅜㅎ 수정할 에정
         } else{
             return null;
         }
+    }
+
+    public List<CommentDTO> findAll(Long boardId) {
+        Board boardEntity = boardRepository.findById(boardId).get();
+        java.util.List<Comment> commentEntityList = commentRepository.findAllByBoardOrderByIdDesc(boardEntity);
+        /* EntityList -> DTOList */
+        List<com.example.demo.DTO.CommentDTO> commentDTOList = new ArrayList<>();
+        for (Comment commentEntity: commentEntityList) {
+            com.example.demo.DTO.CommentDTO commentDTO = com.example.demo.DTO.CommentDTO.toCommentDTO(commentEntity, boardId);
+            commentDTOList.add(commentDTO);
+        }
+        return commentDTOList;
     }
 }

@@ -33,25 +33,21 @@ public class CommentDTO {
 
 
     public Comment toCommentEntity() {
-        Comment comment = Comment.builder()
+        return Comment.builder()
                 .id(id)
                 .writer(writer)
                 .contents(contents)
                 .createTime(createTime)
-                .updateTime(LocalDateTime.now())
-                .board((boardId != null) ? Board.builder().Id(boardId).build() : null)
                 .build();
 
-        return comment;
     }
 
-    public static CommentDTO toCommentDTO(Comment comment) {
-        return new CommentDTO(
-                comment.getId(),
-                (comment.getBoard() != null) ? comment.getBoard().getId() : null,
-                comment.getWriter(),
-                comment.getContents(),
-                comment.getCreateTime(),
-                comment.getUpdateTime());
+    public static CommentDTO toCommentDTO(Comment comment, Long boardId) {
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setId(comment.getId());
+        commentDTO.setWriter(comment.getWriter());
+        commentDTO.setContents(comment.getContents());
+        commentDTO.setBoardId(boardId);
+        return commentDTO;
     }
 }

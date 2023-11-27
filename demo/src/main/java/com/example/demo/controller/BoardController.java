@@ -64,7 +64,8 @@ public class BoardController {
 
 
     @GetMapping("/{Id}") //select. R
-    public String paging(@PathVariable Long Id, Model model, @PageableDefault(page = 1) Pageable pageable) {
+    public String paging(@PathVariable Long Id, Model model,
+                         @PageableDefault(page = 1) Pageable pageable) {
 
         BoardDTO dto/*얜 엔티티*/ = boardService.findById(Id);
 
