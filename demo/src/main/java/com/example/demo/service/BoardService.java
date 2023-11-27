@@ -38,6 +38,9 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final FileRepository fileRepository;
 
+    private final String filepath = "C:/Users/thwls/OneDrive/바탕 화면/";
+                                            //본인PC명
+   //경로지정법 >> 프로젝트 우클릭 - 다음에서 열기 - 탐색기(Explorer) - 파일 열리면 주소창 클릭 - 복붙
     // ** paging 을 함수
     public Page<BoardDTO> paging(Pageable pageable) {
 
@@ -76,18 +79,17 @@ public class BoardService {
         // file 자체는 seter가 없으니 dto로 만들어서 보낸다.
         for(MultipartFile file : files){
             createFilePath(file);
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setFileName(file.getOriginalFilename());
+
+            fileRepository.save(fileDTO.toEntity());
         }
-//        FileDTO file = new FileDTO();
-//        fileRepository.save(file.toEntity());
     }
 
     // ** service 가 싱글톤으로 만들어짐. .찍을때 밑의 애가 호출되지 않도록.
     // uuid 작업할건데 하나하나 세팅하기.
     private String createFilePath(MultipartFile file) throws IOException {
 
-                                //본인PC명
-        String filepath = "C:/Users/thwls/OneDrive/바탕 화면/";
-        //경로지정법 >> 프로젝트 우클릭 - 다음에서 열기 - 탐색기(Explorer) - 파일 열리면 주소창 클릭 - 복붙
         Path uploadPath = Paths.get(filepath); // 저장을 어디해놓을지에 대한 경로
 
         // ** 만약 경로가 없다면, 경로 생성.

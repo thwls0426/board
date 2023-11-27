@@ -3,12 +3,14 @@ package com.example.demo.entity;
 import com.example.demo.DTO.CommentDTO;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class Comment {
 
     @Id
@@ -37,6 +39,12 @@ public class Comment {
         this.board = board;
         this.createTime = createTime;
         this.updateTime = updateTime;
+    }
+
+    public Comment toUpdate(Board board) {
+        Comment comment = new Comment();
+        this.board = board;
+        return comment;
     }
 //
 //    public void updateFromCommentDTO(CommentDTO commentDTO){
