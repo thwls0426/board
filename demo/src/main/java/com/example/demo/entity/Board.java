@@ -51,6 +51,9 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY) //Comment 에 있는 변수명을 적어준다. 연관관계 매핑.
     private List<Comment> comment = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY) //Comment 에 있는 변수명을 적어준다. 연관관계 매핑.
+    private List<File> files = new ArrayList<>();
+
 
     @Builder
     public Board(Long Id, String userName, String title, String contents, LocalDateTime createTime, LocalDateTime updateTime){

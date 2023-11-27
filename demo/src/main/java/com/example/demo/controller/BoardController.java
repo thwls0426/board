@@ -72,18 +72,32 @@ public class BoardController {
         return "detail";
     }
 
-    @PostMapping("/save") // Update
-    public String save(@ModelAttribute BoardDTO boardDTO){
-        System.out.println(boardDTO.getTitle() + " : " + boardDTO.getContents());
-        boardService.save(boardDTO);
-        return "redirect:/board/";
-    }
-
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id){
         System.out.println(id);
         boardService.delete(id);
         return "redirect:/board/paging";
     }
+
+    @PostMapping("/save") // Update.
+    public String save(@ModelAttribute BoardDTO boardDTO){
+        System.out.println(boardDTO.getTitle() + " : " + boardDTO.getContents());
+        boardService.save(boardDTO);
+        return "redirect:/board/";
+    }
+    /* ** 파일 업로드
+     파일 업로드 만들기도 여기서 진행. 컨트롤러는 필요 없음 왜? 보통 게시물 쓸때 발생하니까.
+      그럼 이 파일의 원형은 어디에 보관되는가? -- 어딘가의 공간. 서버. --> 실행된 PC가 서버 자체가 된다.
+      DB 와 파일은 어디에 저장되는가? -- 개인별로 지정할 수 있다. 개인 네트워크(내부 연결망으로 연결된.), 주소 공개된 PC(접속 허용된)
+      서버 내에 DB 저장공간, 파일 저장공간이 있다.
+      이때, 스프링에서 db에 저장하고, 파일은 파일 서버에 저장할것이다. 경로는 내PC의 경로로 만들어서 씀.
+      파일의 정보(경로. 파일이 어디에 저장될 것인지에 대한 것) -- db서버, 원본 -- 파일서버
+      파일을 업로드 하기 위해 필요한 것 : 파일이 저장될 공간의 "주소", 파일의 "이름" 필요, 파일 "사이즈(크기)", 파일 "타입" .. (개인이 알아서)
+      파일 업로드 시 , 서버에서 db를 참조하여 파일 서버에 접속하여 연결.
+      파일경로 설정시, User명을 써주는게 좋다 (이건 PK 일거기 때문)
+      이름 같은걸 방지하기 위해 'UUID(Universally Unique iDentifier : 무작위 식별자. 동일한 코드 안나옴)' 라는것을 사용한다.
+      -->> 이걸 key로 쓸 수는 있는데, 복잡해서 쓰진않음.
+      경로 + UUID + 파일이름.타입 --> 이렇게 불러옴. 이건 회사마다 기준이 다를수 있음.
+    * */
 
 }
