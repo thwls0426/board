@@ -9,6 +9,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/board") //컨트롤러도 이런걸 써서 구분화 시키기
@@ -80,9 +83,14 @@ public class BoardController {
     }
 
     @PostMapping("/save") // Update.
-    public String save(@ModelAttribute BoardDTO boardDTO){
+    public String save(@ModelAttribute BoardDTO boardDTO,
+                       @RequestParam MultipartFile[] files) throws IOException {
+
+                                                            // 이거쓰먄 html도 파일불러오게 수정해야함.
         System.out.println(boardDTO.getTitle() + " : " + boardDTO.getContents());
-        boardService.save(boardDTO);
+        boardService.save(boardDTO, files);
+
+
         return "redirect:/board/";
     }
     /* ** 파일 업로드
