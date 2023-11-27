@@ -22,10 +22,10 @@ public class CommentController {
 
     //에러 반환
     @PostMapping("/save")
-    public ResponseEntity save(@ModelAttribute CommentDTO commentDTO){
+    public ResponseEntity<String> save(@ModelAttribute CommentDTO commentDTO){
 
-        Comment comment = commentService.save(commentDTO);
         System.out.println(commentDTO);
+        Comment comment = commentService.save(commentDTO);
 
         if (comment != null){
             return new ResponseEntity<>("/board/detail/"+ comment.getBoard().getId(), HttpStatus.OK);
