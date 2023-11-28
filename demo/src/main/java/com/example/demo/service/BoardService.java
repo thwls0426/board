@@ -37,7 +37,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final FileRepository fileRepository;
 
-    private final String filepath = "C:/Users/thwls/OneDrive/바탕 화면/";
+    private final String filePath = "C:/Users/thwls/OneDrive/바탕 화면/";
                                             //본인PC명
    //경로지정법 >> 프로젝트 우클릭 - 다음에서 열기 - 탐색기(Explorer) - 파일 열리면 주소창 클릭 - 복붙
     // 이 경로는 전달되어야 함.
@@ -74,7 +74,7 @@ public class BoardService {
     public void save(BoardDTO dto, MultipartFile[] files) throws IOException {
         dto.setCreateTime(LocalDateTime.now());
 
-        Path uploadPath = Paths.get(filepath);
+        Path uploadPath = Paths.get(filePath);
 
         // ** 만약 경로가 없다면... 경로 생성.
         if (!Files.exists(uploadPath)) {
@@ -100,13 +100,13 @@ public class BoardService {
 
             // ** 경로 지정
             // ** C:/Users/G/Desktop/green/Board Files/{uuid + originalFileName}
-            String path = filepath + uuid + originalFileName;
+            String path = filePath + uuid + originalFileName;
 
             // ** 경로에 파일을 저장.  DB 아님
             file.transferTo(new File(path));
 
             BoardFile boardFile = BoardFile.builder()
-                    .filePath(filepath)
+                    .filePath(filePath)
                     .fileName(originalFileName)
                     .uuid(uuid)
                     .fileType(formatType)
