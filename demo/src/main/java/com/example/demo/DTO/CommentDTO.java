@@ -47,6 +47,7 @@ public class CommentDTO {
         commentDTO.setId(comment.getId());
         commentDTO.setWriter(comment.getWriter());
         commentDTO.setContents(comment.getContents());
+        commentDTO.setCreateTime(comment.getCreateTime());
         commentDTO.setBoardId(boardId);
         return commentDTO;
     }

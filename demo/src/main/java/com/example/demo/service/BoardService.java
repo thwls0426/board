@@ -72,18 +72,20 @@ public class BoardService {
     //** 파일 정보 저장 위치!
     @Transactional
     public void save(BoardDTO dto, MultipartFile[] files) throws IOException {
-        dto.setCreateTime(LocalDateTime.now());
+
 
         Path uploadPath = Paths.get(filePath);
 
-        // ** 만약 경로가 없다면... 경로 생성.
+        // ** 만약 경로가 없다면 경로 생성.
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
+        dto.setCreateTime(LocalDateTime.now());
         // ** 게시글 DB에 저장 후 pk을 받아옴.
         Long id = boardRepository.save(dto.toEntity()).getId();
         Board board = boardRepository.findById(id).get();
+
 
         // ** 파일 정보 저장.
         for (MultipartFile file : files) {
@@ -91,30 +93,35 @@ public class BoardService {
             // ** 파일명 추출
             String originalFileName = file.getOriginalFilename();
 
-            // ** 확장자 추출
-            String formatType = originalFileName.substring(
-                    originalFileName.lastIndexOf("."));
+            if (originalFileName != null && !originalFileName.isEmpty() && originalFileName.contains(".")) {
 
-            // ** UUID 생성
-            String uuid = UUID.randomUUID().toString();
+                // ** 확장자 추출
+                String formatType = originalFileName.substring(
+                        originalFileName.lastIndexOf("."));
 
-            // ** 경로 지정
-            // ** C:/Users/G/Desktop/green/Board Files/{uuid + originalFileName}
-            String path = filePath + uuid + originalFileName;
+                // ** UUID 생성
+                String uuid = UUID.randomUUID().toString();
 
-            // ** 경로에 파일을 저장.  DB 아님
-            file.transferTo(new File(path));
+                // ** 경로 지정
+                // ** C:/Users/G/Desktop/green/Board Files/{uuid + originalFileName}
+                String path = filePath + uuid + originalFileName;
 
-            BoardFile boardFile = BoardFile.builder()
-                    .filePath(filePath)
-                    .fileName(originalFileName)
-                    .uuid(uuid)
-                    .fileType(formatType)
-                    .fileSize(file.getSize())
-                    .board(board)
-                    .build();
+                // ** 경로에 파일을 저장.  DB 아님
+                file.transferTo(new File(path));
 
-            fileRepository.save(boardFile);
+                BoardFile boardFile = BoardFile.builder()
+                        .filePath(filePath)
+                        .fileName(originalFileName)
+                        .uuid(uuid)
+                        .fileType(formatType)
+                        .fileSize(file.getSize())
+                        .board(board)
+                        .build();
+
+                fileRepository.save(boardFile);
+            } else {
+                return;
+            }
         }
     }
 

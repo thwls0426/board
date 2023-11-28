@@ -3,14 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        body {
+            background: #333333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .title {
+            animation: rainbow 0.5s;
+            animation-iteration-count: infinite;
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        @keyframes rainbow {
+            100%,0% {
+                color: rgb(255,0,0);
+            }
+            8.3% {
+                color: rgb(255,127,0);
+            }
+            16.6% {
+                color: rgb(255,255,0);
+            }
+            25% {
+                color: rgb(127,255,0);
+            }
+            33.3% {
+                color: rgb(0,255,0);
+            }
+            41.6% {
+                color: rgb(0,255,127);
+            }
+            50% {
+                color: rgb(0,255,255);
+            }
+            58.3% {
+                color: rgb(0,127,255);
+            }
+            66.6% {
+                color: rgb(0,0,255);
+            }
+            75% {
+                color: rgb(127,0,255);
+            }
+            83.3% {
+                color: rgb(255,0,255);
+            }
+            91.6% {
+                color: rgb(255,0,127);
+            }
+        }
+    </style>
 </head>
 <body>
- <form action="/board/save" method="post" enctype="multipart/form-data">
-
-     title: <input type="text" name="title"> <br>
-     contents: <textarea name="contents" cols="30" rows="10"></textarea><br>
-     file:<input type="file" name="files" multiple><br>
-     <input type="submit" value="글작성">
- </form>
+<form action="/board/save" method="post" enctype="multipart/form-data">
+    <div class="title">★게시글 작성★</div>
+    title: <input type="text" name="title"> <br>
+    contents: <textarea name="contents" cols="30" rows="10"></textarea><br>
+    file:<input type="file" name="files" multiple><br>
+    <input type="submit" value="글작성">
+</form>
 </body>
 </html>
