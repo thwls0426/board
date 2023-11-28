@@ -13,7 +13,7 @@ import java.util.Collections;
 @AllArgsConstructor
 public class BoardDTO { //contents , titel() 값만 html에서 필요하니까 이걸 갖고옴. dto 에선 column 안써도 된당
 
-    private Long Id;
+    private Long id;
     //정렬하기위해 구분
     // ** 게시물 제목
     private String title;
@@ -28,7 +28,7 @@ public class BoardDTO { //contents , titel() 값만 html에서 필요하니까 �
 
     public Board toEntity() {
         return Board.builder()
-                .Id(Id)
+                .id(id)
                 .title(title)
                 .contents(contents)
                 .createTime(createTime) // 최초들어간 값만 저장

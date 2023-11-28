@@ -20,7 +20,7 @@ public class Board {
     // ** PK
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     // ** 작성자 이름
     @Column(length = 50)
@@ -52,12 +52,12 @@ public class Board {
     private List<Comment> comment = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY) //Comment 에 있는 변수명을 적어준다. 연관관계 매핑.
-    private List<File> files = new ArrayList<>();
+    private List<BoardFile> boardFiles = new ArrayList<>();
 
 
     @Builder
-    public Board(Long Id, String userName, String title, String contents, LocalDateTime createTime, LocalDateTime updateTime){
-        this.Id = Id;
+    public Board(Long id, String userName, String title, String contents, LocalDateTime createTime, LocalDateTime updateTime){
+        this.id = id;
         this.userName = userName;
         this.title = title;
         this.contents = contents;

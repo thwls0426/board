@@ -1,7 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.DTO.BoardDTO;
+import com.example.demo.DTO.CommentDTO;
+import com.example.demo.entity.BoardFile;
+import com.example.demo.repository.FileRepository;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/board") //컨트롤러도 이런걸 써서 구분화 시키기
@@ -19,6 +24,8 @@ import java.io.IOException;
 public class BoardController {
 
     private final BoardService boardService;
+    private final CommentService commentService;
+    private final FileRepository fileRepository;
 
     @GetMapping("/create") // / << 이건 홈 . 홈에가면 작성해논 게시물을 쫙 보여주도록 할 예정
     public String create(){
@@ -44,11 +51,11 @@ public class BoardController {
         return "paging";
     }
 
-    @GetMapping("/update/{Id}")
-    public String updateForm(@PathVariable Long Id, Model model){ //<변경전데이터>
+    @GetMapping("/update/{id}")
+    public String updateForm(@PathVariable Long id, Model model){ //<변경전데이터>
         // 이동시키는 것. get은 업데이트로 못쓰기때문에. 이걸 update.html로 넘겨서 갖고옴.
 
-        BoardDTO dto = boardService.findById(Id);
+        BoardDTO dto = boardService.findById(id);
         model.addAttribute("board", dto);
         return "update"; //변경할 데이터를 지정하는 역할 이걸 update.html 로 보냄
     }
@@ -63,15 +70,21 @@ public class BoardController {
 
 
 
-    @GetMapping("/{Id}") //select. R
-    public String paging(@PathVariable Long Id, Model model,
+    @GetMapping("/{id}") //select. R
+    public String paging(@PathVariable Long id, Model model,
                          @PageableDefault(page = 1) Pageable pageable) {
 
-        BoardDTO dto/*얜 엔티티*/ = boardService.findById(Id);
+        BoardDTO dto/*얜 엔티티*/ = boardService.findById(id);
 
+        List<CommentDTO> commentList = commentService.findAll(id);
         model.addAttribute("board", dto);
         //얘는 detail 의 <th>id 여기 밑의 저거랑 같아야한다
         model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("commentList", commentList);
+
+        // ** boardId 를 검색해서 모든 파일을 갖고와. 한두개가 아닐 수 있으니 List형태.
+        List<BoardFile> byBoardFiles = fileRepository.findByBoardId(id);
+        model.addAttribute("files",byBoardFiles);
 
         return "detail";
     }

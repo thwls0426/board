@@ -1,8 +1,7 @@
 package com.example.demo.service;
 import com.example.demo.DTO.BoardDTO;
-import com.example.demo.DTO.FileDTO;
 import com.example.demo.entity.Board;
-import com.example.demo.entity.File;
+import com.example.demo.entity.BoardFile;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,6 +40,7 @@ public class BoardService {
     private final String filepath = "C:/Users/thwls/OneDrive/바탕 화면/";
                                             //본인PC명
    //경로지정법 >> 프로젝트 우클릭 - 다음에서 열기 - 탐색기(Explorer) - 파일 열리면 주소창 클릭 - 복붙
+    // 이 경로는 전달되어야 함.
     // ** paging 을 함수
     public Page<BoardDTO> paging(Pageable pageable) {
 
@@ -69,64 +69,57 @@ public class BoardService {
         return BoardDTO.toBoardDTO(board);
     }
 
+    //** 파일 정보 저장 위치!
     @Transactional
-    public void save(BoardDTO dto, MultipartFile[] files) throws IOException{
+    public void save(BoardDTO dto, MultipartFile[] files) throws IOException {
         dto.setCreateTime(LocalDateTime.now());
-        boardRepository.save(dto.toEntity());
 
+        Path uploadPath = Paths.get(filepath);
 
-        //** 파일 정보 저장 위치!
-        // file 자체는 seter가 없으니 dto로 만들어서 보낸다.
-        for(MultipartFile file : files){
-            createFilePath(file);
-            FileDTO fileDTO = new FileDTO();
-            fileDTO.setFileName(file.getOriginalFilename());
-
-            fileRepository.save(fileDTO.toEntity());
-        }
-    }
-
-    // ** service 가 싱글톤으로 만들어짐. .찍을때 밑의 애가 호출되지 않도록.
-    // uuid 작업할건데 하나하나 세팅하기.
-    private String createFilePath(MultipartFile file) throws IOException {
-
-        Path uploadPath = Paths.get(filepath); // 저장을 어디해놓을지에 대한 경로
-
-        // ** 만약 경로가 없다면, 경로 생성.
-        if(!Files.exists(uploadPath)){
+        // ** 만약 경로가 없다면... 경로 생성.
+        if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
-        // ** 파일명 추출
-        String originalFilename = file.getOriginalFilename();
-//        System.out.println(originalFilename); //실행해서 확장자 붙어잇는지 아닌지 여부확인
+        // ** 게시글 DB에 저장 후 pk을 받아옴.
+        Long id = boardRepository.save(dto.toEntity()).getId();
+        Board board = boardRepository.findById(id).get();
 
-        // ** 확장자 추출
-        String formatType = originalFilename.substring(
-                originalFilename.lastIndexOf(".")); //. 뒤에거 갖고오셈
+        // ** 파일 정보 저장.
+        for (MultipartFile file : files) {
 
-//        System.out.println(formatType);
+            // ** 파일명 추출
+            String originalFileName = file.getOriginalFilename();
 
-        //파일이름에서 .뒤에거 빼기
-        // ** 파일 이름만 남기기
-        originalFilename=originalFilename.substring(
-                0, originalFilename.lastIndexOf("."));
-        System.out.println(originalFilename);
+            // ** 확장자 추출
+            String formatType = originalFileName.substring(
+                    originalFileName.lastIndexOf("."));
 
-        // ** UUID 생성
-        String uuid = UUID.randomUUID().toString();
+            // ** UUID 생성
+            String uuid = UUID.randomUUID().toString();
 
-        Path path = uploadPath.resolve(
-         uuid + originalFilename + formatType
-        );
+            // ** 경로 지정
+            // ** C:/Users/G/Desktop/green/Board Files/{uuid + originalFileName}
+            String path = filepath + uuid + originalFileName;
 
-        // ** 저장
-        Files.copy(
-                file.getInputStream(),
-                path,
-                StandardCopyOption.REPLACE_EXISTING);
-        return "";
+            // ** 경로에 파일을 저장.  DB 아님
+            file.transferTo(new File(path));
+
+            BoardFile boardFile = BoardFile.builder()
+                    .filePath(filepath)
+                    .fileName(originalFileName)
+                    .uuid(uuid)
+                    .fileType(formatType)
+                    .fileSize(file.getSize())
+                    .board(board)
+                    .build();
+
+            fileRepository.save(boardFile);
+        }
     }
+
+
+
 
     @Transactional
     public void delete(Long id) {

@@ -28,6 +28,18 @@
         <td th:text="${board.getContents}"></td>
     </tr>
 </table>
+
+<div th:if="${files != null}">
+    <h3>첨부 파일</h3>
+    <ul>
+        <li th:each="file : ${files}">=
+            <!-- 다운로드 링크 추가. 다운로드를 할 수 있는 링크를 걸어줌 -->
+            <a th:href="@{/download/{uuid}/{filename}(uuid=${file.uuid}, filename=${file.fileName})}">Download</a>
+        </li>
+    </ul>
+</div>
+
+
 <button onclick="listReq()">목록</button>
 <button onclick="updateReq()">수정</button>
 <button onclick="deleteReq()">삭제</button>

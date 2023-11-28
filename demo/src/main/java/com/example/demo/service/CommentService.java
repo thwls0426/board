@@ -27,12 +27,12 @@ public class CommentService {
     public Comment save(CommentDTO commentDTO) {
         commentDTO.getBoardId();
         Optional<Board> optionalBoard = boardRepository.findById(commentDTO.getBoardId());
-        commentDTO.setCreateTime(LocalDateTime.now());
 
         if(optionalBoard.isPresent()){
             Board board = optionalBoard.get();
             Comment entity = commentDTO.toCommentEntity();
             entity.toUpdate(board);
+            commentDTO.setCreateTime(LocalDateTime.now());
             return commentRepository.save(entity); //모든 분기에서 return을 넣어야 오류가 안난다. 현재는 null 인데 추ㅜㅎ 수정할 에정
         } else{
             return null;
