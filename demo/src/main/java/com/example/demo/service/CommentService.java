@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.DTO.BoardDTO;
 import com.example.demo.DTO.CommentDTO;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Comment;
@@ -50,4 +51,10 @@ public class CommentService {
         }
         return commentDTOList;
     }
+
+    @Transactional
+    public void delete(Long id) {
+        commentRepository.deleteById(id);
+    }
 }
+
