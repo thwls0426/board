@@ -68,7 +68,7 @@ public class Board {
 
     public void updateFromDTO(BoardDTO boardDTO){
         // ** 모든 변경사항을 세팅 . 원래는 다 넣어야함! 나중에 다넣기
-
+        this.updateTime = boardDTO.getUpdateTime();
         this.title = boardDTO.getTitle();
         this.contents = boardDTO.getContents();
     }
