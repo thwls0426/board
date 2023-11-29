@@ -119,8 +119,6 @@ public class BoardService {
                         .build();
 
                 fileRepository.save(boardFile);
-            } else {
-                return;
             }
         }
     }
@@ -133,6 +131,7 @@ public class BoardService {
     @Transactional
     public void update(BoardDTO boardDTO) {
         Optional<Board> boardOptional = boardRepository.findById(boardDTO.getId());
+        boardDTO.setUpdateTime(LocalDateTime.now());
 
         //if(boardOptional.isPresent()) ... 예외처리 생략
         Board board = boardOptional.get();
