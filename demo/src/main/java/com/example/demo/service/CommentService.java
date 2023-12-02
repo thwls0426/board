@@ -40,13 +40,17 @@ public class CommentService {
         }
     }
 
+    public Optional<Comment> findById(Long id) {
+        return commentRepository.findById(id);
+    }
+
     public List<CommentDTO> findAll(Long boardId) {
         Board boardEntity = boardRepository.findById(boardId).get();
         java.util.List<Comment> commentEntityList = commentRepository.findAllByBoardOrderByIdDesc(boardEntity);
         /* EntityList -> DTOList */
         List<com.example.demo.DTO.CommentDTO> commentDTOList = new ArrayList<>();
         for (Comment commentEntity: commentEntityList) {
-            com.example.demo.DTO.CommentDTO commentDTO = com.example.demo.DTO.CommentDTO.toCommentDTO(commentEntity, boardId);
+            CommentDTO commentDTO = CommentDTO.toCommentDTO(commentEntity, boardId);
             commentDTOList.add(commentDTO);
         }
         return commentDTOList;
@@ -57,6 +61,19 @@ public class CommentService {
         commentRepository.deleteById(id);
     }
 
+    @Transactional
+    public void update(CommentDTO commentDTO) {
+        commentDTO.setUpdateTime(LocalDateTime.now());
+        Optional<Comment> commentOptional = commentRepository.findById(commentDTO.getId()); // 수정된 부분
+
+        if (commentOptional.isPresent()) {
+            Comment comment = commentOptional.get();
+            comment.updateFromCommentDTO(commentDTO);
+
+            commentRepository.save(comment);
+        }
+    }
+
+
 
 }
-
