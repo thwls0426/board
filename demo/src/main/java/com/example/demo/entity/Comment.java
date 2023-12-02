@@ -46,9 +46,9 @@ public class Comment {
         this.board = board;
         return comment;
     }
-//
-//    public void updateFromCommentDTO(CommentDTO commentDTO){
-//        this.writer = commentDTO.getWriter();
-//        this.contents = commentDTO.getContents();
-//    }
+    public void updateFromCommentDTO(CommentDTO commentDTO){
+        this.writer = commentDTO.getWriter();
+        this.contents = commentDTO.getContents();
+        this.updateTime = LocalDateTime.now();
+    }
 }

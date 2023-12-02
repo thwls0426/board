@@ -38,6 +38,7 @@ public class CommentDTO {
                 .writer(writer)
                 .contents(contents)
                 .createTime(createTime)
+                .updateTime(LocalDateTime.now())
                 .build();
 
     }
@@ -48,6 +49,7 @@ public class CommentDTO {
         commentDTO.setWriter(comment.getWriter());
         commentDTO.setContents(comment.getContents());
         commentDTO.setCreateTime(comment.getCreateTime());
+        commentDTO.setUpdateTime(LocalDateTime.now());
         commentDTO.setBoardId(boardId);
         return commentDTO;
     }
