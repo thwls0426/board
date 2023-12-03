@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RestController
-public class FileDownloadController {
+public class FileDownloadController { //파일 다운로드를 가능하게 해주는 컨트롤러
     @GetMapping("/download/{uuid}/{fileName}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String uuid,
                                                  @PathVariable String fileName){
