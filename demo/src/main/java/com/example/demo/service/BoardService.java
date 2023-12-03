@@ -1,5 +1,6 @@
 package com.example.demo.service;
 import com.example.demo.DTO.BoardDTO;
+import com.example.demo.DTO.FileDTO;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.BoardFile;
 import com.example.demo.repository.BoardRepository;
@@ -73,7 +74,6 @@ public class BoardService {
     @Transactional
     public void save(BoardDTO dto, MultipartFile[] files) throws IOException {
 
-
         Path uploadPath = Paths.get(filePath);
 
         // ** 만약 경로가 없다면 경로 생성.
@@ -140,4 +140,48 @@ public class BoardService {
 
         boardRepository.save(board);
     }
+
+
+    @Transactional
+    public void updateFile(Long id, MultipartFile[] files) throws IOException {
+        // Find the board by id
+        Board board = boardRepository.findById(id).get();
+
+        // Delete the existing files
+        fileRepository.deleteByBoard(board);
+
+        // Upload the new files
+        for (MultipartFile file : files) {
+            // Extract the file name
+            String originalFileName = file.getOriginalFilename();
+
+            if (originalFileName != null && !originalFileName.isEmpty() && originalFileName.contains(".")) {
+                // Extract the file extension
+                String formatType = originalFileName.substring(originalFileName.lastIndexOf("."));
+
+                // Generate a UUID
+                String uuid = UUID.randomUUID().toString();
+
+                // Define the path to save the file
+                String path = filePath + uuid + originalFileName;
+
+                // Save the file to the path
+                file.transferTo(new File(path));
+
+                // Create a new BoardFile entity
+                BoardFile boardFile = BoardFile.builder()
+                        .filePath(filePath)
+                        .fileName(originalFileName)
+                        .uuid(uuid)
+                        .fileType(formatType)
+                        .fileSize(file.getSize())
+                        .board(board)
+                        .build();
+
+                // Save the BoardFile entity
+                fileRepository.save(boardFile);
+            }
+        }
+    }
+
 }

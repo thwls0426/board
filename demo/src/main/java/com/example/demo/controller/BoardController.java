@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.DTO.BoardDTO;
 import com.example.demo.DTO.CommentDTO;
+import com.example.demo.DTO.FileDTO;
 import com.example.demo.entity.BoardFile;
 import com.example.demo.repository.FileRepository;
 import com.example.demo.service.BoardService;
@@ -106,6 +107,25 @@ public class BoardController {
 
 
         return "redirect:/board/";
+    }
+
+    @GetMapping("/updateFile/{id}")
+    public String updateFileForm(@PathVariable Long id, Model model) {
+        BoardDTO dto = boardService.findById(id);
+        model.addAttribute("board", dto);
+        return "update";
+    }
+
+    @PostMapping("/updateFile/{id}")
+    public String updateFile(@PathVariable Long id, @ModelAttribute BoardDTO boardDTO, @RequestParam MultipartFile[] files) {
+        try {
+            boardService.updateFile(id, files);
+            boardService.update(boardDTO);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "redirect:/board/error";  // Error page
+        }
+        return "redirect:/board/" + id;
     }
     /* ** 파일 업로드
      파일 업로드 만들기도 여기서 진행. 컨트롤러는 필요 없음 왜? 보통 게시물 쓸때 발생하니까.
