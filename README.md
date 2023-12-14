@@ -4,14 +4,18 @@
 
 ***
 
-## ※ 개발환경
-
-IDE: IntelliJ IDEA Community, 
-Spring Boot 2.6.7, 
-JDK 11, 
-MySql, 
-Spring Data JPA, 
-Thymeleaf
+###### (aplication.yml)
+IDE: IntelliJ IDEA Community   
+Gradle - Groovy, Java 17   
+Jar 11   
+Spring Boot 2.7.6   
+jvm.convert 3.3.2   
+JDK 11   
+mysql 8.0.35   
+Lombok   
+Spring Web   
+Spring Data JPA   
+Thymeleaf   
 
 ---
 
