@@ -9,9 +9,10 @@
 IDE: IntelliJ IDEA Community
 Spring Boot 2.6.7
 JDK 11
-mysql
+MySql
 Spring Data JPA
 Thymeleaf
+
 ---
 
 ## ※ 게시판 주요기능
