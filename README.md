@@ -4,7 +4,7 @@
 
 ***
 
-###### (aplication.yml)
+######
 IDE: IntelliJ IDEA Community   
 Gradle - Groovy, Java 17   
 Jar 11   
