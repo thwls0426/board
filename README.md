@@ -6,11 +6,11 @@
 
 ## ※ 개발환경
 
-IDE: IntelliJ IDEA Community
-Spring Boot 2.6.7
-JDK 11
-MySql
-Spring Data JPA
+IDE: IntelliJ IDEA Community, 
+Spring Boot 2.6.7, 
+JDK 11, 
+MySql, 
+Spring Data JPA, 
 Thymeleaf
 
 ---
